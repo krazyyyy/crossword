@@ -464,6 +464,395 @@ ul {
     font-weight: bold;
   }
   
+  .game_menu li {
+      margin: 0 3px;
+  }
+
+
+
+  .game_menu {
+    right: 50px;
+    position: absolute;
+    -webkit-tap-highlight-color: transparent;
+  font-weight: bold;
+  margin: 0px;
+  padding: 0px;
+  border: 0;
+  font-family: Arial, sans-serif;
+  color: #333333;
+  border-spacing: 0px;
+  outline: none;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+}
+
+#icons_wrap {
+  margin-left: auto;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+li#info {
+background-image: url(https://embed.universaluclick.com/assets/crosswords/images/sprite@1x-f5dbac6706ed1359824dab599addecdd72cd003ecfc1e748cd5a1295ca8f0d1f.png);
+background-position: 0 -1127px;
+
+}
+
+.icons li {
+  position: relative;
+  height: 29px;
+  width: 28px;
+  text-decoration: none;
+  padding-right: 5px;
+  list-style: none;
+  cursor: pointer;
+  /* background-image: url(https://embed.universaluclick.com/assets/crosswords/images/sprite@1x-f5dbac6706ed1359824dab599addecdd72cd003ecfc1e748cd5a1295ca8f0d1f.png); */
+}
+
+li#calendar {
+background-image: url(https://embed.universaluclick.com/assets/crosswords/images/sprite@1x-f5dbac6706ed1359824dab599addecdd72cd003ecfc1e748cd5a1295ca8f0d1f.png);
+
+background-position: 0 -261px;
+}
+
+
+
+ul.popup_menu * {
+  cursor: default !important;
+}
+li#info ul.popup_menu li.popup_container>ul>li>div a, .lighted {
+  color: #1b9bff;
+  text-decoration: none;
+}
+
+.main_container .game_menu_container ul.icons li.time {
+  width: auto;
+  height: auto;
+  margin: auto;
+  font-size: 16px;
+  font-weight: bold;
+  background-image: none;
+}
+
+
+li#play.tactive {
+  background-position: 0 -1571px;
+  margin-right: 0px;
+}
+li#play {
+background-image: url(https://embed.universaluclick.com/assets/crosswords/images/sprite@1x-f5dbac6706ed1359824dab599addecdd72cd003ecfc1e748cd5a1295ca8f0d1f.png);
+background-position: 0 -1413px;
+  margin-right: 0px;
+}
+
+li#info ul.popup_menu {
+  width: 403px;
+  height: 322px;
+  display: none;
+  top: 29px;
+  right: 0px;
+  position: absolute;
+  z-index: 100;
+}
+
+li#info ul.popup_menu li.popup_arrow {
+  right: 5px;
+}
+
+li#hint {
+background-image: url(https://embed.universaluclick.com/assets/crosswords/images/sprite@1x-f5dbac6706ed1359824dab599addecdd72cd003ecfc1e748cd5a1295ca8f0d1f.png);
+}
+
+li#hint ul.popup_menu li.popup_arrow {
+  top : 30px;
+  right: 5px;
+}
+
+li#calendar ul.popup_menu li.popup_arrow {
+  right: 60px;
+}
+
+
+li#info ul.popup_menu>li.popup_container {
+  width: 89%;
+  height: auto;
+  padding: 8px 5px;
+  margin-top: 9px;
+  float: right;
+  background : #fff;
+  border: 1px solid #cccccc;
+  z-index: 100;
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 10px;
+}
+
+ul.popup_menu .popup_arrow {
+  position: absolute;
+  z-index: 102;
+  width: 29px;
+  height: 10px;
+  /* background-image: url(/assets/crosswords/images/menu_popup_header@1x-2908a2e….png); */
+  background-repeat: no-repeat;
+}
+
+li#info ul.popup_menu li.popup_container .title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+li#info ul.popup_menu li.popup_container .button {
+  width: 100%;
+  height: 25px;
+  margin: 5px 0 10px;
+}
+
+ul.popup_menu li.popup_container .button {
+  display: flex;
+  width: 100%;
+  height: 27px;
+  margin: 4px 0 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+ul.popup_menu li.popup_container .button>span {
+  font-size: 12px;
+  padding: 4px 8px;
+  text-align: center;
+  background-repeat: repeat-x;
+  border-right: 1px solid #dddddd;
+}
+
+li#info ul.popup_menu li.popup_container>ul {
+  color: #333;
+  height: auto;
+  font-size: 12px;
+  overflow: hidden;
+  text-align: left;
+}
+
+li#info ul.popup_menu li.popup_container>ul>li.pactive {
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+li#info ul.popup_menu li.popup_container>ul li {
+  background: none;
+  display: none;
+  float: left;
+  width: auto;
+  height: 100%;
+  margin-bottom: 10px;
+}
+
+li#calendar ul.popup_menu {
+  width: 320px;
+  height: auto;
+  display: none;
+  top: 29px;
+  position: absolute;
+  right: -60px;
+  z-index: 100;
+}
+
+li#calendar ul.popup_menu>li.popup_container {
+  width: 89%;
+  height: auto;
+  padding: 8px 5px;
+  margin-top: 9px;
+  background: #fff;
+  border: 1px solid #cccccc;
+  z-index: 100;
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 10px;
+}
+
+li#calendar ul.popup_menu li.popup_container .title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+ul.popup_menu li.popup_container .button>span {
+  font-size: 12px;
+  padding: 4px 8px;
+  text-align: center;
+  background-repeat: repeat-x;
+  border-right: 1px solid #dddddd;
+}
+
+li#calendar ul.popup_menu li.popup_container .puzzles_header {
+  display: flex;
+}
+
+li#calendar ul.popup_menu li.popup_container .puzzles_header>span.name {
+  width: 60%;
+}
+
+li#calendar ul.popup_menu li.popup_container .puzzles_header>span.perc {
+  width: 20%;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games {
+  width: 100%;
+  height: 288px;
+  overflow-y: scroll;
+  background: #fff;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games>div {
+  display: flex;
+  align-content: center;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div span.name {
+  width: 60%;
+  font-size: 12px;
+  padding: 5px 0px;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div>span {
+  border-bottom: 1px inset #dddddd;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div span.perc {
+  width: 20%;
+  font-size: 12px;
+  background: #eeeeee;
+  text-align: center;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div span.time_spent {
+  width: 20%;
+  font-size: 12px;
+  text-align: center;
+}
+
+li#calendar ul.popup_menu li.popup_container .puzzles_header>span:last-child {
+  border-right: none;
+}
+
+li#calendar ul.popup_menu li.popup_container .puzzles_header>span {
+  flex: 1 1 auto;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0px;
+  text-align: left;
+  border-right: 1px inset #dddddd;
+  border-bottom: 1px inset #dddddd;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div span.name .game_date {
+  color: #666666;
+  font-size: 12px;
+}
+
+ul.popup_menu .popup_arrow {
+  position: absolute;
+  z-index: 102;
+  width: 29px;
+  height: 10px;
+  background-image: url(https://embed.universaluclick.com/assets/crosswords/images/menu_popup_header@1x-2908a2e0596468c17052454f200c3d863a360140c34f7202efe7fc9c7babde6f.png);
+  background-repeat: no-repeat;
+}
+
+li#calendar ul.popup_menu li.popup_container .other_games div span.name>span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  display: block;
+}
+
+li#hint ul.popup_menu li.popup_container {
+  width: 160px;
+  height: auto;
+  padding: 8px;
+  margin-top: 40px;
+  float: right;
+  background: #fff;
+  border: 1px solid #cccccc;
+  z-index: 100;
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 10px;
+}
+
+.main_container .game_menu_container ul.icons li span#time {
+  width: 100%;
+  line-height: 30px;
+  color: #929292;
+  display: inline-block;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+li#play.tactive {
+  background-position: 0 -1571px;
+  margin-right: 0px;
+}
+
+li#hint ul.popup_menu li.popup_container .sub_menu {
+  width: 154px;
+  line-height: 32px;
+  margin: 0 auto;
+  font-size: 11px;
+  text-align: left;
+  color: #666;
+  font-weight: bold;
+}
+
+
+
+.iactive {
+  display : block!important; 
+}
+
+
+.main_header {
+    display: flex;
+    width: 100%;
+    height: auto;
+    font-weight: bold;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px dotted #ddd;
+    flex-wrap: wrap;
+    justify-self: stretch;
+}
+
+.heading_name {
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    text-transform: capitalize;
+    text-align: left;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.heading_user {
+    font-size: 11px;
+    font-weight: bold;
+}
+
 
 @keyframes fadeInRight {
     0% {
