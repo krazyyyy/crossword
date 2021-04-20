@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -62,7 +63,6 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
-                'whitenoise.middleware.WhiteNoiseMiddleware',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
