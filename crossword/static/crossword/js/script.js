@@ -12,36 +12,20 @@
 				console.log(element.value)
 			})
 		});
-		fetch (`/puzzle/${opt.value}`)
+		fetch (`/latest`)
 		.then(resp => resp.json())
 		.then(data => {
 			$('#heading_name').html()
 			$('#heading_name').html(data.name)
 			$('#heading_user').html()
-			$('#heading_user').html(`By ${data.user}`)
+			$('#heading_user').html(data.user)
 			$('#date').html()
 			$('#date').html(data.date)
 			var puzzleData = data.item
 			$('#puzzle-wrapper').crossword(puzzleData, 0);
 		})
-
-		opt.addEventListener('change', () => {
-			fetch (`/puzzle/${opt.value}`)
-			.then(resp => resp.json())
-			.then(data => {
-				$('#puzzle-wrapper').html('')
-				$('#puzzle-clues').html('')
-				$('#heading_name').html()
-				$('#heading_name').html(data.name)
-				$('#heading_user').html()
-				$('#heading_user').html(`By ${data.user}`)
-				$('#date').html()
-				$('#date').html(data.date)
-				var puzzleData = data.item
-				$('#puzzle-wrapper').crossword(puzzleData, 0); 
-				
-			})
-		})
+		
+	
 		
 		// provide crossword entries in an array of objects like the following example
 		// Position refers to the numerical order of an entry. Each position can have 
@@ -198,3 +182,21 @@
 	})
 	
 })(jQuery)
+function renderPuzzle(f){
+		
+	fetch (`/puzzle/${f}`)
+	.then(resp => resp.json())
+	.then(data => {
+		$('#puzzle-wrapper').html('')
+		$('#puzzle-clues').html('')
+		$('#heading_name').html()
+		$('#heading_name').html(data.name)
+		$('#heading_user').html()
+		$('#heading_user').html(data.user)
+		$('#date').html()
+		$('#date').html(data.date)
+		var puzzleData = data.item
+		$('#puzzle-wrapper').crossword(puzzleData, 0); 
+		
+	})
+}
