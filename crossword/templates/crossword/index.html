@@ -3,19 +3,144 @@
 {% block title %} CrossWord {% endblock %}
 
 {% block body %}
+<link rel="styleshhet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css">
 
 
 
 
 <div class="header">
-    <div class="head_details">
-        <p><b>Relax Your Mind With CrossWord</b><small id="date"></small></p>
-    </div>
-<div class="head_names">
+  <div class="head_details">
+    <p><b>Relax Your Mind With CrossWord</b><small id="date"></small></p>
+  </div>
+  <div class="main_header">
+  <div class="head_names">
     <h1 id="heading_name"></h1>
     <h4 id="heading_user"></h4>
-</div>
-<div  class="newsletter-overlay">
+
+  </div>
+
+    <div class="game_menu">
+      <div id="icons_wrap">
+        <ul class="icons" id="icons">
+          <li id="info">
+            <ul class="popup_menu dont_hide_menu" id="info_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+                <div class="title">INFORMATION</div>
+                <div class="button">
+                  <span class="sub_menu all bactive" id="popup_instructions">Instructions</span>
+
+                </div>
+                <ul>
+                  <li id="popup_instructions_text" class="pactive">
+                    <div>
+                      <b>For best experience, it is recommended Crossword is played in portrait orientation.</b> <br>
+                      <br>
+                      <b>How to play</b>
+                      <div>Each across and down answer has a clue. Look at the clues and solve
+                        the puzzle by typing the answers.
+                      </div>
+                      <br>
+                      <b class="desktop-only">Web Instructions</b>
+                      <div class="desktop-only">
+                        Click any square to make it active. When you click a puzzle square, the
+                        active clue will appear in the clue list with a colored highlight. Click a
+                        second time to change the clue direction.<br>
+                      </div>
+                      <div class="desktop-only">
+                        You may select specific clues and scroll through the clue lists with the
+                        mouse as well. Click the small arrows at the bottom of the clue lists to
+                        scroll. Select a specific clue by clicking on the clue in the list. The
+                        squares for its answer will be highlighted in the puzzle, and the first
+                        square for the answer will be the active square. Press <span class="lighted">ENTER</span> or
+                        <span class="lighted">TAB</span>
+                        to move to the next clue. Press <span class="lighted">SHIFT-ENTER</span> or <span
+                          class="lighted">SHIFT–TAB</span> to move
+                        to the previous clue. Use <span class="lighted">ARROW</span> keys to change the active letter.
+                        Press the <span class="lighted">SPACE BAR</span> to toggle between <span
+                          class="blacked">DOWN</span> and <span class="blacked">ACROSS</span> clues.
+                        Press <span class="lighted">DELETE</span> or <span class="lighted">BACKSPACE</span> to delete a
+                        letter you have typed.
+                        <br>
+                      </div>
+                      <b class="mobile-only">Mobile Instructions</b>
+                      <div class="mobile-only">
+                        Tap any square in the puzzle to make that square the active letter and
+                        highlight its corresponding clue. Double tap any square to change the
+                        orientation of the active clue from <span class="blacked">ACROSS</span> to <span
+                          class="blacked">DOWN</span> and vice versa.
+                        Type your answer using the keyboard. Scroll through the clues using the blue clue bar.
+                      </div>
+                      <br>
+                      <b>Regular Mode</b>
+                      <div>
+                        In Regular Mode, incorrect letters are shown in red. Use the “HINT”
+                        options button to reveal letters and words.
+                      </div>
+                      <br>
+                      <b>Expert Play Mode</b>
+                      <div>
+                        In Expert Mode, all hints are turned off.
+                      </div>
+                      <br>
+                      <div><b>Skill level option can be changed at any time while playing a puzzle.</b></div>
+                      <br>
+                      <div><b>Cookies must be allowed to save puzzle progress.</b></div>
+                    </div>
+                  </li>
+
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li id="calendar" style="background-position: 0px -261px;">
+            <ul id="calendar_menu" class="popup_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+                <div class="title dont_hide_menu">PUZZLES</div>
+                <div class="button dont_hide_menu">
+                  <span class="sub_menu all bactive" id="games_all">All</span>
+                  <span class="sub_menu in_progress" id="games_in_progress">In Progress</span>
+                  <span class="sub_menu completed" id="games_completed">Completed</span>
+                </div>
+                <div class="puzzles_header dont_hide_menu">
+                  <span class="name">Puzzle</span>
+                  <span class="perc">% Complete</span>
+                  <span class="spent">Time Spent</span>
+                </div>
+                <div class="other_games" id="popup_games">
+                 {% for p in puzzle %}
+                  <div onclick="renderPuzzle('{{ p.id }}')"><span class="name"><span>{{ p }}</span><span
+                        class="game_date"><span>{{ p.pub_date | date:"d / M  / Y"}}</span></span></span><span class="perc">0%</span><span
+                      class="time_spent">00:00:00</span></div>
+                      {% endfor %}
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li id="hint" style="background-position: 0px -969px;">
+            <ul id="hint_menu" class="popup_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+
+                <div class="sub_menu" id="solve_random">Reveal Letter</div>
+                <div class="sub_menu" id="word_solve">Reveal Word</div>
+                <div class="sub_menu" id="solve_all">Reveal Puzzle</div>
+              </li>
+            </ul>
+          </li>
+
+          <li style=" margin : 8px 12px 0px 0px;" class="time_count">
+            <span id="hour">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+          </li>
+          <li class="fa fa-play" id="play" class="tactive">&nbsp;</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="newsletter-overlay">
 
     <div id="newsletter-popup">
       <a href="#" class="popup-close">X</a>
@@ -27,57 +152,32 @@
             <input class="frm-name" type="text" placeholder="YOUR NAME" name="FNAME" required="">
           </div>
           <div class="frm-row">
-            <input class="frm-email" type="text" placeholder="YOUR EMAIL" name="EMAIL" required="">             </div>
+            <input class="frm-email" type="text" placeholder="YOUR EMAIL" name="EMAIL" required=""> </div>
           <div class="frm-submit">
             <input type="submit" value="Submit">
           </div>
         </form>
       </div>
     </div>
-  </div>
+
 
 </div>
-<div class="nav">
 
-        <h1 id="heading"></h1>
-    <div class="timer">
-    <span id="minutes">00</span>:<span id="seconds">00</span>
-    </div>
-    
-    <div class="calender drop_menu">
-        <ul> 
-        <li class="dropdown"><a href="#" class="trigger-drop">Calender<i class="arrow"></i></a>
-            <ul class="drop">
-                <div class="title">Puzzles</div>
-              <li><a href="#"><span>Puzzle</span><span> Publication</span><span> Time </span></a></li>
-            {% for p in puzzle %}
-              <li value="{{ p.id }}"><a><span>{{ p.user }}</span> <span>{{ p.pub_date | date:"d / M  / Y"}}</span> <span> 00:00 </span></a></li>
-            {% endfor %}
-            </ul>
-          </li>
-        </ul>
-   
-</div>
-</div>
 <div id="clues_top"></div>
 <div id="puzzle-wrapper">
-    <!-- crossword puzzle appended here -->
+  <!-- crossword puzzle appended here -->
 </div>
 
 <div>
-    <select  id="options_level">
-        {% for p in puzzle %}
-            <option value="{{ p.id }}" {% if forloop.first %} selected {% endif %}>{{ p }}</option>
-        {% endfor %}
-    </select>
-    <ul class="drop">
-    <li><a href="#"><button class="btn-16" id="word_solve">Solve Word</button></a></li>
-    <li><a href="#"></a><button class="btn-16" id="solve_all">Solve All</button></a></li>
-    <li><a href="#"></a><button class="btn-16" id="solve_random">Solve Random</button></a></li>
-    </ul>
+  <select id="options_level">
+    {% for p in puzzle %}
+    <option value="{{ p.id }}" {% if forloop.first %} selected {% endif %}>{{ p }}</option>
+    {% endfor %}
+  </select>
+  
 </div>
 <div>
-    
+
 </div>
 
 {% endblock %}
