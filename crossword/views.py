@@ -7,6 +7,23 @@ from django.core.mail import send_mail
 from .models import Puzzle, Entry
 
 # Create your views here.
+def getLatestPuzzle(request):
+    puzzle = Puzzle.objects.order_by('-pub_date')[0]
+    entry = Entry.objects.filter(puzzle=puzzle)
+    li = []
+    for idx, e in enumerate(entry):
+        if e.down == False:
+            ori = "across"
+        else:
+            ori = "down"
+        x = {"clue" : f"{e.clue}", "answer" : f"{e.answer}", "position" : f"{e.position}", "orientation" : f"{ori}", "startx" : f"{e.x}", "starty" : f"{e.y}"}
+        li.append(x)
+    puzzle_name = f"{puzzle}"
+    puzzle_date = f"{puzzle.pub_date}"
+    puzzle_user = f"{puzzle.user}"
+    response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user)
+    return JsonResponse(response, status=200)
+
 def index(request):
     puzzle = Puzzle.objects.all()
     return render(request, 'crossword/index.html', {
