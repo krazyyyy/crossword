@@ -1,7 +1,4 @@
-/**
- * Jesse Weisbeck's Crossword Puzzle (for all 3 people left who want to play them)
- *
- */
+
 (function ($) {
 	$.fn.crossword = function (entryData, time) {
 
@@ -717,7 +714,6 @@ function getCookie(cname)
 			
 		}
 		
-		loadData()
 		// countUp(time)
 		$('table').one('click', () => {
 			countUp = setInterval(counter, 1000);
@@ -725,9 +721,9 @@ function getCookie(cname)
 		})
 		puzz.data.onchange = clearInterval(countUp)
 		
-	
 		
-		console.log(time)
+		
+		
 		
 	}
 	// Check for Win
@@ -737,8 +733,33 @@ function getCookie(cname)
 		}
 		
 	}
+	play = document.querySelector('#play')
+	play.addEventListener('click', () => {
+		
+		clearInterval(countUp)
+	})
+
+	info = document.querySelector('#info')
+	info_menu = document.querySelector('#info_menu')
 	
+	info.addEventListener('click', () => {
+	  info_menu.classList.toggle('iactive')
+	})
 	
+	calendar = document.querySelector('#calendar')
+	calendar_menu = document.querySelector('#calendar_menu')
 	
+	calendar.addEventListener('click', () => {
+		calendar_menu.classList.toggle('iactive')
+	})
+	
+	hint = document.querySelector('#hint')
+	hint_menu = document.querySelector('#hint_menu')
+	
+	hint.addEventListener('click', () => {
+		hint_menu.classList.toggle('iactive')
+	})
+	
+	loadData()
 	
 })(jQuery);
