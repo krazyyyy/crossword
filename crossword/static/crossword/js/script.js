@@ -1,202 +1,162 @@
 
 
-(function($) {
-	$(function() {
+	var Clock = {
+		totalSeconds: 1000,
+		start: function () {
+		  if (!this.interval) {
+			  var self = this;
+			  function pad(val) { return val > 9 ? val : "0" + val; }
+			  this.interval = setInterval(function () {
+				self.totalSeconds += 1;
+	  
+				document.getElementById("hour").innerHTML = pad(parseInt(self.totalSeconds / 3600 % 60));
+				document.getElementById("minute").innerHTML = pad(Math.floor(self.totalSeconds / 60 % 60));
+				document.getElementById("second").innerHTML = pad(parseInt(self.totalSeconds % 60));
+			  }, 1000);
+		  }
+		},
+	  
+		reset: function () {
+		  Clock.totalSeconds = null; 
+		  clearInterval(this.interval);
+		  document.getElementById("minute").innerHTML = "00";
+		  document.getElementById("second").innerHTML = "00";
+		  document.getElementById("hour").innerHTML = "00";
+		  delete this.interval;
+		},
+		pause: function () {
+		  clearInterval(this.interval);
+		  delete this.interval;
+		},
+	  
 		
+	  };
 
+
+	  
+	  (function($) {
+		  $(function() {
+			  
+			  play = document.getElementById("play")
+		play.addEventListener("click", function () {
+			if (play.classList.contains('tactive'))
+			{
+				Clock.pause(); 
+			   play.classList.remove('tactive')
+			   play.classList.add('pactive')
+			}
+			else
+			{
+			 Clock.start(); 
+			 play.classList.remove('pactive')
+			 play.classList.add('tactive')
+			}
+		});
+	
+		
+		
+		
+		
+		
 		opt = document.querySelector('#options_level')
 		drop = document.querySelector('.drop')
-		list = document.querySelectorAll('li')
-		list.forEach(element => {
-			element.addEventListener('click', () => {
-				console.log(element.value)
-			})
-		});
+		
 		fetch (`/latest`)
 		.then(resp => resp.json())
 		.then(data => {
+			console.log("Fetch 1")
 			$('#heading_name').html()
 			$('#heading_name').html(data.name)
 			$('#heading_user').html()
-			$('#heading_user').html(data.user)
+			$('#heading_user').html(`By ${data.user}`)
 			$('#date').html()
 			$('#date').html(data.date)
 			var puzzleData = data.item
-			$('#puzzle-wrapper').crossword(puzzleData, 0);
+			$('#puzzle-wrapper').crossword(puzzleData, data.user);
+			Clock.reset();
+			play.classList.remove('tactive')
+			play.classList.add('pactive')
 		})
 		
-	
 		
-		// provide crossword entries in an array of objects like the following example
-		// Position refers to the numerical order of an entry. Each position can have 
-		// two entries: an across entry and a down entry
-		// var puzzleData = [
-		// 	 	{
-		// 			clue: "First letter of greek alphabet",
-		// 			answer: "alpha",
-		// 			position: 1,
-		// 			orientation: "across",
-		// 			startx: 1,
-		// 			starty: 1
-		// 		},
-		// 	 	{
-		// 			clue: "Not a one ___ motor, but a three ___ motor",
-		// 			answer: "phase",
-		// 			position: 3,
-		// 			orientation: "across",
-		// 			startx: 7,
-		// 			starty: 1
-		// 		},
-		// 		{
-		// 			clue: "Created from a separation of charge",
-		// 			answer: "capacitance",
-		// 			position: 5,
-		// 			orientation: "across",
-		// 			startx: 1,
-		// 			starty: 3
-		// 		},
-		// 		{
-		// 			clue: "The speeds of engines without and accelaration",
-		// 			answer: "idlespeeds",
-		// 			position: 8,
-		// 			orientation: "across",
-		// 			startx: 1,
-		// 			starty: 5
-		// 		},
-		// 		{
-		// 			clue: "Complex resistances",
-		// 			answer: "impedances",
-		// 			position: 10,
-		// 			orientation: "across",	
-		// 			startx: 2,
-		// 			starty: 7
-		// 		},
-		// 		{
-		// 			clue: "This device is used to step-up, step-down, and/or isolate",
-		// 			answer: "transformer",
-		// 			position: 13,
-		// 			orientation: "across",
-		// 			startx: 1,
-		// 			starty: 9
-		// 		},
-		// 		{
-		// 			clue: "Type of ray emitted from the sun",
-		// 			answer: "gamma",
-		// 			position: 16,
-		// 			orientation: "across",
-		// 			startx: 1,
-		// 			starty: 11
-		// 		},
-		// 		{
-		// 			clue: "C programming language operator",
-		// 			answer: "cysan",
-		// 			position: 17,
-		// 			orientation: "across",
-		// 			startx: 7,
-		// 			starty: 11
-		// 		},
-		// 		{
-		// 			clue: "Defines the alpha-numeric characters that are typically associated with text used in programming",
-		// 			answer: "ascii",
-		// 			position: 1,
-		// 			orientation: "down",
-		// 			startx: 1,
-		// 			starty: 1
-		// 		},
-		// 		{
-		// 			clue: "Generally, if you go over 1kV per cm this happens",
-		// 			answer: "arc",
-		// 			position: 2,
-		// 			orientation: "down",
-		// 			startx: 5,
-		// 			starty: 1
-		// 		},
-		// 		{
-		// 			clue: "Control system strategy that tries to replicate the human through process (abbr.)",
-		// 			answer: "ann",
-		// 			position: 4,
-		// 			orientation: "down",
-		// 			startx: 9,
-		// 			starty: 1
-		// 		},
-		// 		{
-		// 			clue: "Greek variable that usually describes rotor positon",
-		// 			answer: "theta",
-		// 			position: 6,
-		// 			orientation: "down",
-		// 			startx: 7,
-		// 			starty: 3
-		// 		},
-		// 		{
-		// 			clue: "Electromagnetic (abbr.)",
-		// 			answer: "em",
-		// 			position: 7,
-		// 			orientation: "down",
-		// 			startx: 11,
-		// 			starty: 3
-		// 		},
-		// 		{
-		// 			clue: "No. 13 across does this to a voltage",
-		// 			answer: "steps",
-		// 			position: 9,
-		// 			orientation: "down",
-		// 			startx: 5,
-		// 			starty: 5
-		// 		},
-		// 		{
-		// 			clue: "Emits a loud wailing sound",
-		// 			answer: "siren",
-		// 			position: 11,
-		// 			orientation: "down",
-		// 			startx: 11,
-		// 			starty: 7
-		// 		},
-		// 		{
-		// 			clue: "Information technology (abbr.)",
-		// 			answer: "it",
-		// 			position: 12,
-		// 			orientation: "down",
-		// 			startx: 1,
-		// 			starty: 8
-		// 		},
-		// 		{
-		// 			clue: "Asynchronous transfer mode (abbr.)",
-		// 			answer: "atm",
-		// 			position: 14,
-		// 			orientation: "down",
-		// 			startx: 3,
-		// 			starty: 9
-		// 		},
-		// 		{
-		// 			clue: "Offset current control (abbr.)",
-		// 			answer: "occ",
-		// 			position: 15,
-		// 			orientation: "down",
-		// 			startx: 7,
-		// 			starty: 9
-		// 		}
-		// 	] 
-	
-		// $('#puzzle-wrapper').crossword(puzzleData);
 		
-	})
+		
+		// opt = document.querySelector('select')
+		// fetch (`/puzzle/${1}`)
+		// 	.then(resp => resp.json())
+		// 	.then(data => {
+			// 		console.log("Fetch 2")
+			// 		$('#puzzle-wrapper').html('')
+			// 		$('#puzzle-clues').html('')
+			// 		$('#heading_name').html()
+			// 		$('#heading_name').html(data.name)
+			// 		$('#heading_user').html()
+			// 		$('#heading_user').html(`By ${data.user}`)
+			// 		$('#date').html()
+			// 		$('#date').html(data.date)
+			// 		var puzzleData = data.item
+			// 		$('#puzzle-wrapper').crossword(puzzleData); 
+			
+			// 	})
+			
+			// 	opt.addEventListener('change', () => {
+				// 		fetch (`/puzzle/${opt.value}`)
+				// 		.then(resp => resp.json())
+				// 		.then(data => {
+					// 			console.log("Fetch 2")
+					// 			$('#puzzle-wrapper').html('')
+					// 			$('#puzzle-clues').html('')
+	// 			$('#heading_name').html()
+	// 			$('#heading_name').html(data.name)
+	// 			$('#heading_user').html()
+	// 			$('#heading_user').html(`By ${data.user}`)
+	// 			$('#date').html()
+	// 			$('#date').html(data.date)
+	// 			var puzzleData = data.item
+	// 			$('#puzzle-wrapper').crossword(puzzleData); 
 	
+	// 		})
+	// 	})
+})
 })(jQuery)
+
 function renderPuzzle(f){
-		
+	
 	fetch (`/puzzle/${f}`)
 	.then(resp => resp.json())
 	.then(data => {
+		console.log("Fetch 2")
 		$('#puzzle-wrapper').html('')
 		$('#puzzle-clues').html('')
 		$('#heading_name').html()
 		$('#heading_name').html(data.name)
 		$('#heading_user').html()
-		$('#heading_user').html(data.user)
+		$('#heading_user').html(`By ${data.user}`)
+		next_id = (parseInt(data.id) + 1)
 		$('#date').html()
 		$('#date').html(data.date)
 		var puzzleData = data.item
-		$('#puzzle-wrapper').crossword(puzzleData, 0); 
+		$('#puzzle-wrapper').crossword(puzzleData, data.user); 
+		Clock.reset();
+		play.classList.remove('tactive')
+		play.classList.add('pactive')
+		
 		
 	})
+}
+
+function sendMail() {
+	e.preventDefault()
+fetch('/subscribe', {
+	method : 'POST',
+	body : JSON.stringify({
+		email : document.querySelector(`#name_email`).value, 
+		name : document.querySelector(`#name_form`).value 
+	})
+})
+.then(response => response.json())
+.then(data => {
+	console.log(data)
+	document.querySelector('.newsletter-overlay').style.display = 'none';
+})
 }
