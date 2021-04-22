@@ -1,17 +1,11 @@
 
 (function ($) {
-	$.fn.crossword = function (entryData, time) {
+	$.fn.crossword = function (entryData, user_head) {
 
 		var puzz = {}; // put data array in object literal to namespace it into safety
 		puzz.data = entryData;
 
-		var sec = time;
-		function pad(val) {
-			return val > 9 ? val : "0" + val;
-		}
-		const counter  = ()=>{	document.getElementById("seconds").innerHTML = pad(++sec % 60);
-		document.getElementById("minutes").innerHTML = pad(parseInt(sec / 60, 10));
-}
+		
 		
 			
 		
@@ -44,6 +38,7 @@
 		var puzInit = {
 			
 			init: function () {
+				
 				currOri = 'across'; // app's init orientation could move to config object
 				
 				// Reorder the problems array ascending by POSITION
@@ -280,7 +275,7 @@
 					var valToCheck, currVal;
 					
 					util.getActivePositionFromClassGroup($(e.target));
-					
+	
 					valToCheck = puzz.data[activePosition].answer.toLowerCase();
 					
 					currVal = $('.position-' + activePosition + ' input')
@@ -545,7 +540,13 @@
 		
 		puzInit.init();
 		
-
+		
+		$('table').click(() => {
+			Clock.start();
+			play.classList.remove('pactive')
+			play.classList.add('tactive')
+			
+		})
 		
 		
 		function randomSolve() {
@@ -608,22 +609,19 @@
 		});
 		
 		function storeData() {
-			jsonObj = [];
 			for (var i = 0; i < td.length; i++) {
 				item = {}
 				coords = (td[i].getAttribute('data-coords'))
 				inp = td[i].querySelector('input')
 				if (inp != null) {
-					item["coords"] = coords
-					item["input"] = inp.value
-					head = ($('#heading_name').html())
 					
 					
-					window.localStorage.setItem(`Puzzle-${head},${coords}`, inp.value)
+					window.localStorage.setItem(`Puzzle-${user_head},${coords}`, inp.value)
 					
-					window.localStorage.setItem(`Puzzle-${head}-class,${coords}`, $(inp).attr('class'))
+					window.localStorage.setItem(`Puzzle-${user_head}-class,${coords}`, $(inp).attr('class'))
 					
 				}
+				console.log('test')
 			}
 			
 		}
@@ -633,31 +631,22 @@
 		
 		var delay = 5000; //in milleseconds
 
-jQuery(document).ready(function($){
-  setTimeout(function(){ showNewsletterPopup(); }, delay);
- 
+		
+		setTimeout(function(){ showNewsletterPopup(); }, delay);
+		
   $('.popup-close').click(function(){
-      $('.newsletter-overlay').hide();
-     
+	  $('.newsletter-overlay').hide();
+	  
       //when closed create a cookie to prevent popup to show again on refresh
       setCookie('newsletter-popup', 'popped', 30);
-  });
-});
-
-function showNewsletterPopup(){
-    $('.newsletter-overlay').show();
-    setCookie('newsletter-popup', 'popped', 30);
-//   if( getCookie('newsletter-popup') == ""){
-//   }
-//   else{
-//     console.log("Newsletter popup blocked.");
-//   }
-}
+	});
+	
+	
 
 
 function setCookie(cname,cvalue,exdays)
 {
-    var d = new Date();
+	var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));
     var expires = "expires="+d.toGMTString();
     document.cookie = cname+"="+cvalue+"; "+expires+"; path=/";
@@ -669,12 +658,21 @@ function getCookie(cname)
     var ca = document.cookie.split(';');
     for(var i=0; i<ca.length; i++)
     {
-        var c = jQuery.trim(ca[i]);
+		var c = jQuery.trim(ca[i]);
         if (c.indexOf(name)==0) return c.substring(name.length,c.length);
     }
     return "";
 }
-		
+
+function showNewsletterPopup(){
+	$('.newsletter-overlay').show();
+	setCookie('newsletter-popup', 'popped', 50);
+// 	  if( getCookie('newsletter-popup') == ""){
+//   }
+//   else{
+// 	console.log("Newsletter popup blocked.");
+//   }
+}
 
 		function loadData() {
 			
@@ -686,25 +684,25 @@ function getCookie(cname)
 
 					head = ($('#heading_name').html())
 					// inp.value = window.localStorage.removeItem(`Puzzle-${head},${coords}`)
-					inp.value = window.localStorage.getItem(`Puzzle-${head},${coords}`)
+					inp.value = window.localStorage.getItem(`Puzzle-${user_head},${coords}`)
 					// clas = window.localStorage.removeItem(`Puzzle-${head}-class,${coords}`)
-					clas = window.localStorage.getItem(`Puzzle-${head}-class,${coords}`)
-					console.log(clas)
+					clas = window.localStorage.getItem(`Puzzle-${user_head}-class,${coords}`)
+					
 					if (clas.split(' '))
 					{
 						classes = (clas.split(' '))
 						classes_length = classes.length
-						console.log('1')
 					}
 					else
 					{
-						console.log('2')
+						
 						classes_length = 0
 					}
 					for (var j = 0; j < classes_length; j++) 
 					{
-						
-						inp.classList.add(classes[j])
+						if (classes != ""){
+							inp.classList.add(classes[j])
+						}
 					}
 					// inp.value = window.localStorage.removeItem(`Puzzle-${head},${coords}`)
 					
@@ -714,30 +712,29 @@ function getCookie(cname)
 			
 		}
 		
-		// countUp(time)
-		$('table').one('click', () => {
-			countUp = setInterval(counter, 1000);
-			
-		})
-		puzz.data.onchange = clearInterval(countUp)
+
+
 		
 		
 		
-		
+		loadData()
 		
 	}
 	// Check for Win
 	function win(total, current) {
 		if (total == current) {
-			alert("You Won")
+			$('#congratz').addClass('iactive')
 		}
 		
 	}
-	play = document.querySelector('#play')
-	play.addEventListener('click', () => {
-		
-		clearInterval(countUp)
+	
+
+
+	$('.modal-close').click( ()=> {
+		$('#congratz').removeClass('iactive')
 	})
+
+	
 
 	info = document.querySelector('#info')
 	info_menu = document.querySelector('#info_menu')
@@ -760,6 +757,6 @@ function getCookie(cname)
 		hint_menu.classList.toggle('iactive')
 	})
 	
-	loadData()
+
 	
 })(jQuery);
