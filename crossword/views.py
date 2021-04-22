@@ -54,9 +54,11 @@ def renderPuzzle(request, pk):
     response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user, id=puzzle_id)
     return JsonResponse(response, status=200)
 
+@csrf_exempt
 def sendMail(request):
-    if request.POST['name'] != "":
-        name = request.POST['name']
+    data = json.load(request.body)
+    if data.name != "":
+        name = data.name
     else:
         name = "Dear"
     
@@ -66,7 +68,7 @@ def sendMail(request):
 
     message = f'Hi , Thank you for Subscribing Our Service.'
     email_from = settings.EMAIL_HOST_USER
-    mail = request.POST['email']
+    mail = data.email
     recipient_list = [mail, ]
     send_mail( subject, message, email_from, recipient_list )
     sub = Subscriber.objects.create(email=mail , name=name)
