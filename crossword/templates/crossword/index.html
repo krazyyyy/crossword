@@ -1,9 +1,10 @@
 {% extends 'crossword/layout.html' %}
+{% load social_share %}
 
 {% block title %} CrossWord {% endblock %}
 
 {% block body %}
-<link rel="styleshhet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css">
+
 
 
 
@@ -13,11 +14,11 @@
     <p><b>Relax Your Mind With CrossWord</b><small id="date"></small></p>
   </div>
   <div class="main_header">
-  <div class="head_names">
-    <h1 id="heading_name"></h1>
-    <h4 id="heading_user"></h4>
+    <div class="head_names">
+      <h1 id="heading_name"></h1>
+      <h4 id="heading_user"></h4>
 
-  </div>
+    </div>
 
     <div class="game_menu">
       <div id="icons_wrap">
@@ -72,20 +73,6 @@
                         Type your answer using the keyboard. Scroll through the clues using the blue clue bar.
                       </div>
                       <br>
-                      <b>Regular Mode</b>
-                      <div>
-                        In Regular Mode, incorrect letters are shown in red. Use the “HINT”
-                        options button to reveal letters and words.
-                      </div>
-                      <br>
-                      <b>Expert Play Mode</b>
-                      <div>
-                        In Expert Mode, all hints are turned off.
-                      </div>
-                      <br>
-                      <div><b>Skill level option can be changed at any time while playing a puzzle.</b></div>
-                      <br>
-                      <div><b>Cookies must be allowed to save puzzle progress.</b></div>
                     </div>
                   </li>
 
@@ -94,6 +81,7 @@
             </ul>
           </li>
           <li id="calendar" style="background-position: 0px -261px;">
+
             <ul id="calendar_menu" class="popup_menu" style="opacity: 1; display: none;">
               <li class="popup_arrow">&nbsp;</li>
               <li class="popup_container">
@@ -109,17 +97,17 @@
                   <span class="spent">Time Spent</span>
                 </div>
                 <div class="other_games" id="popup_games">
-                 {% for p in puzzle %}
-                  <div onclick="renderPuzzle('{{ p.id }}')"><span class="name"><span>{{ p }}</span><span
-                        class="game_date"><span>{{ p.pub_date | date:"d / M  / Y"}}</span></span></span><span class="perc">0%</span><span
-                      class="time_spent">00:00:00</span></div>
-                      {% endfor %}
+                  {% for p in puzzle %}
+                  <div class="lists" onclick="renderPuzzle('{{ p.id }}')"><span class="name"><span>{{ p }}</span><span
+                        class="game_date"><span>{{ p.pub_date | date:"d / M  / Y"}}</span></span></span><span
+                      class="perc">0%</span><span class="time_spent">00:00:00</span></div>
+                  {% endfor %}
                 </div>
               </li>
             </ul>
           </li>
 
-          <li id="hint" style="background-position: 0px -969px;">
+          <li id="hint">
             <ul id="hint_menu" class="popup_menu" style="opacity: 1; display: none;">
               <li class="popup_arrow">&nbsp;</li>
               <li class="popup_container">
@@ -132,52 +120,69 @@
           </li>
 
           <li style=" margin : 8px 12px 0px 0px;" class="time_count">
-            <span id="hour">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>
           </li>
-          <li class="fa fa-play" id="play" class="tactive">&nbsp;</li>
+          <li id="play" class="pactive">&nbsp;</li>
         </ul>
       </div>
     </div>
   </div>
-  </div>
-  <div class="newsletter-overlay">
+</div>
+<div class="newsletter-overlay">
 
-    <div id="newsletter-popup">
-      <a href="#" class="popup-close">X</a>
-      <div class="newsletter-in">
-        <h3>Join our Newsletter!</h3>
-        <p>Join Our Newsletter to Get Weekly Updates</p>
-        <form target="_blank" class="validate" method="post" action="#">
-          <div class="frm-row">
-            <input class="frm-name" type="text" placeholder="YOUR NAME" name="FNAME" required="">
-          </div>
-          <div class="frm-row">
-            <input class="frm-email" type="text" placeholder="YOUR EMAIL" name="EMAIL" required=""> </div>
-          <div class="frm-submit">
-            <input type="submit" value="Submit">
-          </div>
-        </form>
-      </div>
+  <div id="newsletter-popup">
+    <a href="#" class="popup-close">X</a>
+    <div class="newsletter-in">
+      <h3>Join our Newsletter!</h3>
+      <p>Join Our Newsletter to Get Weekly Updates</p>
+      <form class="validate" onsubmit="sendMail()">
+   
+        <div class="frm-row">
+          <input class="frm-name" id="name_form" type="text" placeholder="YOUR NAME" name="name">
+        </div>
+        <div class="frm-row">
+          <input class="frm-email" id="name_email" type="text" placeholder="YOUR EMAIL" name="email" required=""> </div>
+        <div class="frm-submit">
+          <input type="submit" value="Submit">
+        </div>
+      </form>
     </div>
+  </div>
 
 
+</div>
+
+<div class="modal modal--congratulations" id="congratz" style="display: none;">
+  <a href="#" class="modal-close">X</a>
+  <div class="modal-top">
+    <img class="modal-icon u-imgResponsive"
+      src="https://cdn.pixabay.com/photo/2012/04/25/01/19/laurel-wreath-41585_960_720.png" alt="Trophy" />
+    <div class="modal-header">Congratulations</div>
+    <div class="modal-subheader">You Have Completed Puzzle</div>
+  </div>
+  <div class="modal-bottom">
+    <button class="modal-btn u-btn u-btn--share">
+      <!-- <a href="#" class="icon-button twitter"><i class="fab fa-twitter"
+          aria-hidden="true"></i>
+        <span></span></a> -->
+        {% post_to_twitter 'New Song: {{object.title}}. Check it out!' object_or_url  %}
+       <!-- <a href="" class="icon-button facebook">
+        <i class="fab fa-facebook-f"></i>
+        <span></span></a></button> -->
+    <button id="continue" class="modal-btn u-btn u-btn--success">Continue</button>
+  </div>
 </div>
 
 <div id="clues_top"></div>
 <div id="puzzle-wrapper">
   <!-- crossword puzzle appended here -->
 </div>
+<select name="" id="pull">
+  {% for p in puzzle %}
+  <option value="{{ p.id }}">{{ p }}</option>
+  {% endfor %}
+</select>
 
-<div>
-  <select id="options_level">
-    {% for p in puzzle %}
-    <option value="{{ p.id }}" {% if forloop.first %} selected {% endif %}>{{ p }}</option>
-    {% endfor %}
-  </select>
-  
-</div>
-<div>
 
-</div>
 
 {% endblock %}
