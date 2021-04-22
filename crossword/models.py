@@ -4,6 +4,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.core.mail import send_mail
+
 
 PUZZLE_TYPES = ((0, 'Blocked'), (1, 'Barred'))
 BOOL_DOWN = ((True, 'Down'), (False, 'Across'))
@@ -25,7 +28,7 @@ def default_pub_date():
 
 class Puzzle(models.Model):
     """Puzzles to solve. Non-editable fields are unused."""
-    # name = models.CharField(max_length=64, default="Puzzle Name")
+    name = models.CharField(max_length=64, default="Puzzle Name")
     user = models.ForeignKey(User, models.CASCADE, default=default_user)
     number = models.IntegerField(default=default_number)
     pub_date = models.DateTimeField('publication date', default=default_pub_date)
@@ -37,6 +40,17 @@ class Puzzle(models.Model):
     class Meta:
         unique_together = (('user', 'number'),)
 
+    def send(self):
+        subscriber = Subscriber.objects.all()
+        for sub in subscriber:  
+            subject = "New Puzzle"
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [sub.email,]
+            message = """Hey, It's Weekly Update From xCross Word\n It is to Inform You That New Puzzle Have been Adding\n Be The First To Solve Its\n Best Regrads\n Team Crossword"""
+            
+            send_mail( subject, message, email_from, recipient_list )
+    
+    
     def __str__(self):
         return str(self.user.username + ' #' + str(self.number))
 
@@ -60,16 +74,16 @@ class Entry(models.Model):
     def __str__(self):
         return self.answer
 
-class Progress(models.Model):
-    user = models.CharField(max_length=64)
-    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE)
-    time = models.TimeField()
+class Subscriber(models.Model):
+    email = models.EmailField()
+    name = models.CharField(max_length=64, null=True, blank=True)
 
-    class Meta:
-        verbose_name_plural = 'Progress'
+# class Progress(models.Model):
+#     user = models.CharField(max_length=64)
+#     puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE)
+#     time = models.TimeField()
+
+#     class Meta:
+#         verbose_name_plural = 'Progress'
         
-# Create your models here.
-class PuzzleCrossword(models.Model):
-    session = models.CharField(max_length=180)
-    time = models.TimeField()
 
