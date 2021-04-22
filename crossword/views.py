@@ -2,13 +2,18 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from django.core.mail import send_mail
 
-from .models import Puzzle, Entry
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+from .models import Puzzle, Entry, Subscriber
 
 # Create your views here.
 def getLatestPuzzle(request):
-    puzzle = Puzzle.objects.order_by('-pub_date')[0]
+    # puzzle = Puzzle.objects.order_by('-pub_date')[0]
+    puzzle = Puzzle.objects.all()[0]
     entry = Entry.objects.filter(puzzle=puzzle)
     li = []
     for idx, e in enumerate(entry):
@@ -21,7 +26,8 @@ def getLatestPuzzle(request):
     puzzle_name = f"{puzzle}"
     puzzle_date = f"{puzzle.pub_date}"
     puzzle_user = f"{puzzle.user}"
-    response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user)
+    puzzle_id = f"{puzzle.id}"
+    response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user, id=puzzle_id)
     return JsonResponse(response, status=200)
 
 def index(request):
@@ -44,11 +50,28 @@ def renderPuzzle(request, pk):
     puzzle_name = f"{puzzle}"
     puzzle_date = f"{puzzle.pub_date}"
     puzzle_user = f"{puzzle.user}"
-    response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user)
+    puzzle_id = f"{puzzle.id}"
+    response = dict(item=li, name=puzzle_name, date=puzzle_date, user=puzzle_user, id=puzzle_id)
     return JsonResponse(response, status=200)
 
-# def sendMail(request):
-#     data = json.loads(request.body)
+def sendMail(request):
+    if request.POST['name'] != "":
+        name = request.POST['name']
+    else:
+        name = "Dear"
+    
+    subject = 'Welcome'
+    # html_message = render_to_string('crossword/email_template.html', {'name': name})
+    # plain_message = strip_tags(html_message)
+
+    message = f'Hi , Thank you for Subscribing Our Service.'
+    email_from = settings.EMAIL_HOST_USER
+    mail = request.POST['email']
+    recipient_list = [mail, ]
+    send_mail( subject, message, email_from, recipient_list )
+    sub = Subscriber.objects.create(email=mail , name=name)
+    sub.save()
+    return JsonResponse({"message" : "Success"})
 
 
 @csrf_exempt
