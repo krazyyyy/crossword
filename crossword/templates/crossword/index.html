@@ -1,0 +1,202 @@
+{% extends 'crossword/layout.html' %}
+{% load social_share %}
+
+{% block title %} CrossWord {% endblock %}
+
+{% block body %}
+
+
+
+<div class="top_head">
+  <h1>
+    <span class="center">L</span>
+    <span class="center">e</span>
+    <span class="center">t</span>
+    <span class="center">'</span>
+    <span class="center">s</span>
+    <span class="center">P</span>
+    <span class="center">l</span>
+    <span class="center">a</span>
+    <span class="center">y</span>
+    <span class="center">P</span>
+    <span class="center">u</span>
+    <span class="center">z</span>
+    <span class="center">z</span>
+    <span class="center">l</span>
+    <span class="center">e</span>
+  </h1>
+</div>
+
+<div class="header">
+  <div class="head_details">
+    <p><b id="flicking">Puzzle of the Week</b><small id="date"></small></p>
+  </div>
+  <div class="main_header">
+    <div class="head_names">
+      <h1 id="heading_name"></h1>
+      <h4 id="heading_user"></h4>
+
+    </div>
+
+    <div class="game_menu">
+      <div id="icons_wrap">
+        <ul class="icons" id="icons">
+          <li id="info">
+            <ul class="popup_menu dont_hide_menu" id="info_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+                <div class="title">INFORMATION</div>
+                <div class="button">
+                  <span class="sub_menu all bactive" id="popup_instructions">Instructions</span>
+
+                </div>
+                <ul>
+                  <li id="popup_instructions_text" class="pactive">
+                    <div>
+                      <b>For best experience, it is recommended Crossword is played in portrait orientation.</b> <br>
+                      <br>
+                      <b>How to play</b>
+                      <div>Each across and down answer has a clue. Look at the clues and solve
+                        the puzzle by typing the answers.
+                      </div>
+                      <br>
+                      <b class="desktop-only">Web Instructions</b>
+                      <div class="desktop-only">
+                        Click any square to make it active. When you click a puzzle square, the
+                        active clue will appear in the clue list with a colored highlight. Click a
+                        second time to change the clue direction.<br>
+                      </div>
+                      <div class="desktop-only">
+                        You may select specific clues and scroll through the clue lists with the
+                        mouse as well. Click the small arrows at the bottom of the clue lists to
+                        scroll. Select a specific clue by clicking on the clue in the list. The
+                        squares for its answer will be highlighted in the puzzle, and the first
+                        square for the answer will be the active square. Press <span class="lighted">ENTER</span> or
+                        <span class="lighted">TAB</span>
+                        to move to the next clue. Press <span class="lighted">SHIFT-ENTER</span> or <span
+                          class="lighted">SHIFT–TAB</span> to move
+                        to the previous clue. Use <span class="lighted">ARROW</span> keys to change the active letter.
+                        Press the <span class="lighted">SPACE BAR</span> to toggle between <span
+                          class="blacked">DOWN</span> and <span class="blacked">ACROSS</span> clues.
+                        Press <span class="lighted">DELETE</span> or <span class="lighted">BACKSPACE</span> to delete a
+                        letter you have typed.
+                        <br>
+                      </div>
+                      <b class="mobile-only">Mobile Instructions</b>
+                      <div class="mobile-only">
+                        Tap any square in the puzzle to make that square the active letter and
+                        highlight its corresponding clue. Double tap any square to change the
+                        orientation of the active clue from <span class="blacked">ACROSS</span> to <span
+                          class="blacked">DOWN</span> and vice versa.
+                        Type your answer using the keyboard. Scroll through the clues using the blue clue bar.
+                      </div>
+                      <br>
+                    </div>
+                  </li>
+
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li id="calendar" style="background-position: 0px -261px;">
+
+            <ul id="calendar_menu" class="popup_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+                <div class="title dont_hide_menu">PUZZLES</div>
+                <div class="button dont_hide_menu">
+                  <span class="sub_menu all bactive" id="games_all">All</span>
+                  <span class="sub_menu in_progress" id="games_in_progress">In Progress</span>
+                  <span class="sub_menu completed" id="games_completed">Completed</span>
+                </div>
+                <div class="puzzles_header dont_hide_menu">
+                  <span class="name">Puzzle</span>
+                  <span class="perc">% Complete</span>
+                  <span class="spent">Time Spent</span>
+                </div>
+                <div class="other_games" id="popup_games">
+                  {% for p in puzzle %}
+                  <div class="lists" onclick="renderPuzzle('{{ p.id }}')"><span class="name"><span>{{ p }}</span><span
+                        class="game_date"><span>{{ p.pub_date | date:"d / M  / Y"}}</span></span></span><span
+                      class="perc">0%</span><span class="time_spent">00:00:00</span></div>
+                  {% endfor %}
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li id="hint">
+            <ul id="hint_menu" class="popup_menu" style="opacity: 1; display: none;">
+              <li class="popup_arrow">&nbsp;</li>
+              <li class="popup_container">
+
+                <div class="sub_menu" id="solve_random">Reveal Letter</div>
+                <div class="sub_menu" id="word_solve">Reveal Word</div>
+                <div class="sub_menu" id="solve_all">Reveal Puzzle</div>
+              </li>
+            </ul>
+          </li>
+
+          <li id="time_count">
+            <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>
+          </li>
+          <li id="play" class="pactive">&nbsp;</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="newsletter-overlay">
+
+  <div id="newsletter-popup">
+    <a href="#" class="popup-close">X</a>
+    <div class="newsletter-in">
+      <h3>Join our Newsletter!</h3>
+      <p>Join Our Newsletter to Get Weekly Updates</p>
+      <form class="validate" onsubmit="sendMail()">
+   
+        <div class="frm-row">
+          <input class="frm-name" id="name_form" type="text" placeholder="YOUR NAME" name="name">
+        </div>
+        <div class="frm-row">
+          <input class="frm-email" id="name_email" type="text" placeholder="YOUR EMAIL" name="email" required=""> </div>
+        <div class="frm-submit">
+          <input type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="modal modal--congratulations" id="congratz" style="display: none;">
+  <a href="#" class="modal-close">X</a>
+  <div class="modal-top">
+    <img class="modal-icon u-imgResponsive"
+      src="https://cdn.pixabay.com/photo/2012/04/25/01/19/laurel-wreath-41585_960_720.png" alt="Trophy" />
+    <div class="modal-header">Congratulations</div>
+    <div class="modal-subheader">You Have Completed Puzzle</div>
+  </div>
+  <div class="modal-bottom">
+    <button class="modal-btn u-btn u-btn--share">
+      <!-- <a href="#" class="icon-button twitter"><i class="fab fa-twitter"
+          aria-hidden="true"></i>
+        <span></span></a> -->
+        {% post_to_twitter 'You Have Succefully Completed The Puzzle. Check it out!' object_or_url "Tweet" %}
+       <!-- <a href="" class="icon-button facebook">
+        <i class="fab fa-facebook-f"></i>
+        <span></span></a></button> -->
+    <button id="continue" class="modal-btn u-btn u-btn--success">Continue</button>
+  </div>
+</div>
+
+<div id="clues_top"></div>
+<div id="puzzle-wrapper">
+  <!-- crossword puzzle appended here -->
+</div>
+
+
+
+
+{% endblock %}
