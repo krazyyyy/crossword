@@ -1,0 +1,144 @@
+{% extends 'crossword/layout.html' %}
+
+{% load static %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'crossword/css/create.css' %}">
+<div class="puzzle" role="main">
+	<div id="grid-wrapper">
+		<div id="grid" data-number="{{ number }}" data-author="{{ author }}"> 
+			<input id="ip" type="text" autocomplete="off">
+			{% block loading %}
+			<div id="loading" class="instructions">
+				<p>Loading...</p>
+			</div>
+			{% endblock %}
+			<div id="choose-grid-message" class="instructions" style="display: none;">
+				<p>Welcome to the crossword composer!</p>
+				<p>Here, you can construct your own crossword interactively.</p>
+				<p class="pointy">To begin, choose a grid&nbsp;</p>
+			</div>
+			{% block render_grid %}{% endblock %}
+		</div>
+		<div id="edit-controls" style="display: none;">
+			<form action="">
+				<label for="edit-letters">Edit text</label>
+				<input type="radio" name="edit-mode" id="edit-letters" checked />
+				<label for="edit-pattern">Edit pattern</label>
+				<input type="radio" name="edit-mode" id="edit-pattern" />
+			</form>
+		</div>
+		<div id="grid-assistant">
+			<div id="intro-message" class="instructions" style="display: none;">
+				{% block intro_text %}
+				<p>&uarr;<br>Click and type to fit some words together.</p>
+				<p class="pointy">Click on a clue to edit it. Have fun!&nbsp;</p>
+				{% endblock %}
+			</div>
+			<div id="suggestions">
+				<!-- Suggested words are shown here -->
+			</div>
+			<div class="fade">
+			</div>
+		</div>
+	</div>
+	<div id="blanks" style="display: none;">
+		{% for img in thumbs %}
+		{{ img|safe }}
+		{% endfor %}
+	</div>
+	<div id="clues" style="display: none;">
+		<div class="clue-box">
+			<h4>Across</h4>
+			<ul>
+				{% block across_clues %}{% endblock %}
+			</ul>
+		</div>
+		<div class="clue-box">
+			<h4>Down</h4>
+			<ul>
+				{% block down_clues %}{% endblock %}
+			</ul>
+		</div>
+		<div class="buttons">
+			<button onclick="Display.showHelpText()">Help</button>
+			<button id="cancel" onclick="PuzzleCreator.cancelEdit()">Cancel edit</button>
+			<button id="restart" onclick="PuzzleCreator.restart()">Start over</button>
+			<button onclick="PuzzleCreator.printPuzzle()">Print puzzle</button>
+			<button onclick="PuzzleCreator.printSolution()">Print solution</button>
+			<button onclick="PuzzleCreator.downloadIpuz()">Download as ipuz</button>
+			<button onclick="Display.showSaveForm()">Save online</button>
+		</div>
+	</div>
+	<div id="save-puzzle" class="simple-content simple-form" style="display: none">
+		<h3>Save</h3>
+		<form action="" method="post" id="save-form" onsubmit="return PuzzleCreator.validateSaveForm()">{% csrf_token %}
+			{% if not user.is_authenticated %}
+			<p>Create your setter login details, or enter your existing ones</p>
+			<label for="save-username">Pseudonym:</label>
+			<input type="text" name="username" id="save-username">
+			<label for="save-password">Password:</label>
+			<input type="password" name="password" id="save-password">
+			<label for="save-email">Email:</label>
+			<input type="text" name="email" id="save-email">
+			{% elif number %}
+			<p>Puzzle #{{ number }} by {{ author }}</p>
+			{% else %}
+			<p>New puzzle by {{ user.username }}</p>
+			{% endif %}
+
+			<div class="checkbox-container">
+				<label for="save-public" class="checkbox-label">Allow other people to view this puzzle</label>
+				<input type="checkbox" name="visibility" value="public" id="save-public" checked>
+			</div>
+			<div class="buttons">
+				<button type="button" onclick="Display.hideSaveForm()">Cancel</button>
+				<button type="submit">Save</button>
+			</div>
+			<input type="hidden" name="author" id="save-author" value="{{ author }}">
+			<input type="hidden" name="number" id="save-number" value="{{ number }}">
+			<input type="hidden" name="ipuz" id="save-ipuz">
+		</form>
+	</div>
+	<div id="help-text" style="display: none;">
+		<h4>Building the grid</h4>
+		<p>Click on any white square and start typing the word you want. A list of words and phrases
+			which fit will appear in the little box underneath the grid. There may be a lot of them, so scroll the box to see them all.
+			Click on any word or phrase to insert it into the grid, and the clue enumeration will automatically update to match.</p>
+		<p>As you fill words in, you may find places where nothing good fits - that's part of the challenge! To backtrack,
+			select an entry in the grid and click &lsquo;clear&rsquo; in the box underneath.</p>
+		<p>To add or remove black squares, select the &lsquo;Edit pattern&rsquo; radio button beneath the grid and then click the squares
+			you want to change. Clue numbers and enumeration will automatically change to match the grid. When done, select the
+			&lsquo;Edit text&rsquo; radio button to go back to filling in words.</p>
+		<p>Progress is automatically saved in your browser as you go along, and will persist until its cache is cleared or you click &lsquo;start over&rsquo;.</p>
+
+		<h4>Writing clues</h4>
+		<p>Clue entry is free-form, and this tool is too dumb to help you with them. It provides convenient spaces to write them down, but the rest is up to you!</p>
+
+		<div class="buttons">
+			<button onclick="Display.hideHelpText()">Close help</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'crossword/js/FileSaver.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'crossword/js/grid.js' %}"></script>
+<script type="text/javascript" src="{% static 'crossword/js/create.js' %}"></script>
+<script>
+	// @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt
+	var wordListLocation = "{% static 'crossword/wordlist.txt' %}";
+	var blockImgLocation = "{% static 'crossword/images/grey-px.png' %}";
+	var saveLocation = undefined;
+	var storage = undefined;
+
+	{% if number and author %}
+	saveLocation = "{% url 'puzzle' author number %}";
+	storage = "edit-{{ author }}-{{ number }}";
+	{% endif %}
+
+	PuzzleCreator.init(wordListLocation, blockImgLocation, saveLocation, storage);
+	// @license-end
+</script>
+{% endblock %}
